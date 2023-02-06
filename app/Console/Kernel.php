@@ -13,7 +13,12 @@ class Kernel extends ConsoleKernel
      * @var array
      */
     protected $commands = [
-        //
+        Commands\BusinessNews::class,
+        Commands\EntertaimentNews::class,
+        Commands\HealthNews::class,
+        Commands\ScienceNews::class,
+        Commands\SportsNews::class,
+        Commands\TechnologyNews::class,
     ];
 
     /**
@@ -24,6 +29,12 @@ class Kernel extends ConsoleKernel
      */
     protected function schedule(Schedule $schedule)
     {
-        //
+        // job untuk mengambil berita terbaru
+        $schedule->command('newsUpdate:business')->hourly()->timezone('asia/jakarta');
+        $schedule->command('newsUpdate:entertainment')->hourly()->timezone('asia/jakarta');
+        $schedule->command('newsUpdate:health')->hourly()->timezone('asia/jakarta');
+        $schedule->command('newsUpdate:science')->hourly()->timezone('asia/jakarta');
+        $schedule->command('newsUpdate:sports')->hourly()->timezone('asia/jakarta');
+        $schedule->command('newsUpdate:technology')->hourly()->timezone('asia/jakarta');
     }
 }
