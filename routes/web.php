@@ -16,3 +16,6 @@
 $router->get('/', function () use ($router) {
     return $router->app->version();
 });
+
+// GET business news
+$router->get('news[/{category}]',"NewsController@getNews");
