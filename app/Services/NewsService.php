@@ -142,6 +142,7 @@ class NewsService
                             'url_image' => $news->urlToImage == null ? "unknown" : $news->urlToImage,
                             'category' => $this->jenisBerita,
                             'is_headline' => false,
+                            'total_love' => 0
                         ]);
                         if ($this->isHeadlineNews($news)) {
                             $data[$index]['is_headline'] = true;

@@ -17,13 +17,14 @@ return new class extends Migration
             $table->id('id');
             $table->string('source',80);
             $table->string('author',100);
-            $table->string('title',150)->unique();
+            $table->string('title',255)->unique();
             $table->text('description');
             $table->integer('published_at');
             $table->text('content');
             $table->text('url_image');
             $table->string('category');
             $table->boolean('is_headline');
+            $table->integer('total_love');
         });
     }
 
