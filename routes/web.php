@@ -17,5 +17,11 @@ $router->get('/', function () use ($router) {
     return $router->app->version();
 });
 
+// User Register
 $router->post('register',"RegisterController@register");
+
+// Get News Data (jika kategori kosong maka ambil headline news)
 $router->get('news[/{category}]',"NewsController@getNews");
+
+// Menyukai postingan berita
+$router->post('love',"NewsController@loveNews");
