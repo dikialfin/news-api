@@ -102,4 +102,68 @@ class AuthController extends Controller
             ]);
         }
     }
+
+    /*
+        FUNCTION LOGOUT
+        di gunakan untuk logout user
+
+        @response code 200 : berhasil logout
+        @response code 406 : terdapat data yang tidak lolos validasi
+        @response code 404 : data email/token tidak dapat di temukan, kemungkinan user sudah logout
+        @response code 500 : terdapat kesalahan pada server ketika logout
+    */
+    public function logout(Request $request) {
+
+        try {
+            $validator = Validator::make($request->all(),[
+                'email' => 'required',
+                'token' => 'required'
+            ],[
+                'email.required' => "Email tidak boleh kosong",
+                'token.required' => "Token tidak boleh kosong",
+            ]);
+
+            if ($validator->fails()) {
+                return response()->json([
+                    'code' => '406',
+                    'status' => 'failed',
+                    'message' => $validator->errors()
+                ],406,[
+                    'Content-Type' => 'application/json'
+                ]);
+            }
+
+            $resultData = User::where('email','=',$request->input('email'))->where('token','=',$request->input('token'))->first();
+
+            if ($resultData == null) {
+                return response()->json([
+                    'code' => '404',
+                    'status' => 'failed',
+                    'message' => 'Email/Token tidak valid/tidak dapat di temukan'
+                ],404,[
+                    'Content-Type' => 'application/json'
+                ]);
+            }
+
+            User::where('email','=',$request->input('email'))->where('token','=',$request->input('token'))->update(['token' => null]);
+
+            return response()->json([
+                'code' => '200',
+                'status' => 'oke',
+                'message' => 'berhasil logout'
+            ],200,[
+                'Content-Type' => 'application/json'
+            ]);
+
+        } catch (Exception $th) {
+            return response()->json([
+                'code' => '500',
+                'status' => 'failed',
+                'message' => 'terjadi kesalahan pada server ketika logout'
+            ],500,[
+                'Content-Type' => 'application/json'
+            ]);
+        }
+
+    }
 }

@@ -21,6 +21,8 @@ $router->get('/', function () use ($router) {
 $router->post('register',"RegisterController@register");
 // User Login
 $router->post('login',"AuthController@login");
+// User Logout
+$router->post('logout',"AuthController@logout");
 
 $router->group(['middleware' => 'auth'], function () use ($router) {
     // Get News Data (jika kategori kosong maka ambil headline news)
