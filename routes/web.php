@@ -28,3 +28,6 @@ $router->post('love',"NewsController@loveNews");
 
 // Get Comment berdasarkan berita
 $router->get('comment/{idNews}',"NewsController@getComments");
+
+// Get News detail
+$router->get('detail/{idNews}',"NewsController@getDetailNews");

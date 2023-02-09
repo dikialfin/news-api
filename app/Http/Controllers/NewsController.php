@@ -226,7 +226,7 @@ class NewsController extends BaseController
             )
                 ->join('tbl_user','tbl_user.id','=','tbl_comments.id_user')
                 ->where('id_news','=',$idNews)
-                ->get();
+                ->paginate(5);
             return response()->json([
                 'code' => '200',
                 'status' => 'ok',
@@ -244,5 +244,70 @@ class NewsController extends BaseController
                 'Content-Type' => 'application/json'
             ]);
         }
+    }
+
+    /*
+        GET DETAIL NEWS FUNCTION
+        function/method ini di gunakan untuk mengambil data detail berita
+
+        @response code 200 : berhasil mengambil data detail berita
+        @response code 500 : terdapat kesalahan pada server ketika mengambil data detail berita
+    */
+    public function getDetailNews($idNews) {
+
+        try {
+            
+            $newsDetail = $this->newsModel::select(
+                DB::raw('
+                tbl_news.id,
+                tbl_news.source, 
+                tbl_news.author, 
+                tbl_news.title, 
+                tbl_news.description, 
+                tbl_news.published_at, 
+                tbl_news.content, 
+                tbl_news.url_image, 
+                tbl_news.category, 
+                tbl_news.is_headline, 
+                tbl_news.total_love, count(tbl_comments.id_news) as total_comment')
+            )
+            ->leftJoin('tbl_comments','tbl_news.id','=','tbl_comments.id_news')
+            ->where('id',$idNews)
+            ->groupBy('tbl_news.id',
+            'tbl_news.source', 
+            'tbl_news.author', 
+            'tbl_news.title', 
+            'tbl_news.description', 
+            'tbl_news.published_at', 
+            'tbl_news.content', 
+            'tbl_news.url_image', 
+            'tbl_news.category', 
+            'tbl_news.is_headline', 
+            'tbl_comments.id_news',
+            'tbl_news.total_love')
+            ->first();
+            
+            return response()->json([
+                'code' => '200',
+                'status' => 'ok',
+                'data' => $newsDetail
+            ],200,[
+                'Content-Type' => 'application/json'
+            ]);
+
+
+
+        } catch (Exception $th) {
+            return response()->json([
+                'code' => '500',
+                'status' => 'failed',
+                'message' => $th->getMessage(),
+                'data' => []
+            ],500,[
+                'Content-Type' => 'application/json'
+            ]);
+        }
+       
+
     }
 }
