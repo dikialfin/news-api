@@ -29,9 +29,9 @@ class Authentication
                 'Content-Type' => 'application/json'
             ]);
         }
-
+        
         if (
-            User::where('token')->get()->count() < 1
+            User::where('token','=',$userToken)->get()->count() < 1
         ) {
             return response()->json([
                 'code' => '401',
