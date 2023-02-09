@@ -1,24 +1,13 @@
-# Lumen PHP Framework
+# Indonesia News Rest Api
 
-[![Build Status](https://travis-ci.org/laravel/lumen-framework.svg)](https://travis-ci.org/laravel/lumen-framework)
-[![Total Downloads](https://img.shields.io/packagist/dt/laravel/lumen-framework)](https://packagist.org/packages/laravel/lumen-framework)
-[![Latest Stable Version](https://img.shields.io/packagist/v/laravel/lumen-framework)](https://packagist.org/packages/laravel/lumen-framework)
-[![License](https://img.shields.io/packagist/l/laravel/lumen)](https://packagist.org/packages/laravel/lumen-framework)
+[![AUTHOR](https://travis-ci.org/laravel/lumen-framework.svg)](https://instagram.com/diki.alfin_)
+[![News API](https://img.shields.io/packagist/dt/laravel/lumen-framework)](https://newsapi.org/)
 
-Laravel Lumen is a stunningly fast PHP micro-framework for building web applications with expressive, elegant syntax. We believe development must be an enjoyable, creative experience to be truly fulfilling. Lumen attempts to take the pain out of development by easing common tasks used in the majority of web projects, such as routing, database abstraction, queueing, and caching.
+Indonesia news rest api adalah sebuah rest api yang di bangun untuk tujuan research pembuat dalam membuat sebuah rest api. rest api ini di bangun menggunakan framework lumen 9, data berita berasal dari [News API](https://newsapi.org/) yang secara otomatis mengambil data setiap satu jam.
+jika anda tertarik ingin mencoba rest api yang saya buat silahkan download dan atur scheduler anda setiap 1 jam untuk menjalankan "php artisan schedule:run".
+jika ada kritik dan saran mengenai project ini atau anda menemui bug pada rest api ini silahkan kontak saya di [INSTAGRAM](https://instagram.com/diki.alfin_)
 
-## Official Documentation
+## List Endpoint
 
-Documentation for the framework can be found on the [Lumen website](https://lumen.laravel.com/docs).
+Jika anda ingin mengetahui daftar endpoint yang terdapat pada rest api ini silahkan kunjungi link ini : [ENDPOINT LIST](https://www.postman.com/dikialfin/workspace/indonesia-news-rest-api/collection/10706359-beed1c7a-6034-4515-86ff-c9bc22a062d5?action=share&creator=10706359).
 
-## Contributing
-
-Thank you for considering contributing to Lumen! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
-
-## Security Vulnerabilities
-
-If you discover a security vulnerability within Lumen, please send an e-mail to Taylor Otwell at taylor@laravel.com. All security vulnerabilities will be promptly addressed.
-
-## License
-
-The Lumen framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
