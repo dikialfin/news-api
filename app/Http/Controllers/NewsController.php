@@ -50,6 +50,7 @@ class NewsController extends BaseController
                 'tbl_news.url_image', 
                 'tbl_news.category', 
                 'tbl_news.is_headline', 
+                'tbl_comments.id_news', 
                 'tbl_news.total_love')
                 ->paginate(5);
                 return response()->json([
@@ -91,6 +92,7 @@ class NewsController extends BaseController
                 'tbl_news.url_image', 
                 'tbl_news.category', 
                 'tbl_news.is_headline', 
+                'tbl_comments.id_news',
                 'tbl_news.total_love')
                 ->paginate(5);
                 return response()->json([
