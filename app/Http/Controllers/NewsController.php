@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Laravel\Lumen\Routing\Controller as BaseController;
 use App\Models\News;
 use App\Models\LovedNews;
+use App\Models\Comment;
 use App\Libraries\Helpers;
 use Exception;
 use Illuminate\Http\Request;
@@ -15,9 +16,18 @@ class NewsController extends BaseController
 {
     public function __construct(
         private $newsModel = new News(),
-        private $lovedNewsModel = new LovedNews()
+        private $lovedNewsModel = new LovedNews(),
+        private $commentModel = new Comment(),
     ){}
 
+    /*
+        GET NEWS FUNCTION
+        function/method ini di gunakan untuk mengambil data berita berdasarkan category yang di pilih, default kategori dari function/method ini adalah headline news
+
+        @response code 200 : berhasil mengambil data berita
+        @response code 400 : data category yang di terima tidak tersedia
+        @response code 500 : terdapat kesalahan pada server ketika mengambil data berita
+    */
     public function getNews($category = null) {
        try {
         $date = Helpers::getDateToday();
@@ -126,6 +136,15 @@ class NewsController extends BaseController
        }
     }
 
+    /*
+        LOVE NEWS FUNCTION
+        function/method ini di gunakan untuk memberikan love/suka pada berita 
+
+        @response code 2001 : berhasil menyukai berita
+        @response code 406 : terdapat data yang tidak lolos validasi
+        @response code 400 : berita sudah pernah di like/love oleh user yang sama
+        @response code 500 : terdapat kesalahan pada server ketika menyukai berita
+    */
     public function loveNews(Request $request) {
 
         try {
@@ -146,16 +165,20 @@ class NewsController extends BaseController
                     'code' => '406',
                     'status' => 'failed',
                     'message' => $validator->errors()
-                ],406);
+                ],406,[
+                    'Content-Type' => 'application/json'
+                ]);
             }
             if (
                 $this->lovedNewsModel::where('id_news','=',$request->input('id_news'))->where('id_user','=',$request->input('id_news'))->get()->count() > 0
             ) {
-                return response([
+                return response()->json([
                     'code' => '400',
                     'status' => 'failed',
                     'message' => 'Berita sudah pernah anda sukai'
-                ],400);
+                ],400,[
+                    'Content-Type' => 'application/json'
+                ]);
             }
 
             $this->newsModel::find($request->input('id_news'))->increment('total_love');
@@ -168,7 +191,9 @@ class NewsController extends BaseController
                 'code' => '201',
                 'status' => 'ok',
                 'message' => 'Berhasil menyukai berita'
-            ],201);
+            ],201,[
+                'Content-Type' => 'application/json'
+            ]);
 
             
         } catch (Exception $error) {
@@ -176,8 +201,48 @@ class NewsController extends BaseController
                 'code' => '500',
                 'status' => 'failed',
                 'message' => 'Oops terjadi kesalahan di dalam server, silahkan coba lagi nanti'
-            ],500);
+            ],500,[
+                'Content-Type' => 'application/json'
+            ]);
         }
 
+    }
+
+    /*
+        GET COMMENT FUNCTION
+        function/method ini di gunakan untuk mengambil data komentar berdasarkan berita yang di pilih
+
+        @response code 200 : berhasil mengambil data komentar
+        @response code 500 : terdapat kesalahan pada server ketika mengambil data komentar
+    */
+    public function getComments($idNews) {
+        try {
+            $result = $this->commentModel::select(
+                DB::raw('
+                    tbl_user.first_name,
+                    tbl_user.last_name, 
+                    tbl_user.user_profile, 
+                    tbl_comments.comment')
+            )
+                ->join('tbl_user','tbl_user.id','=','tbl_comments.id_user')
+                ->where('id_news','=',$idNews)
+                ->get();
+            return response()->json([
+                'code' => '200',
+                'status' => 'ok',
+                'data' => $result
+            ],200,[
+                'Content-Type' => 'application/json'
+            ]);
+        } catch (Exception $th) {
+            return response()->json([
+                'code' => '500',
+                'status' => 'failed',
+                'message' => $th->getMessage(),
+                'data' => []
+            ],500,[
+                'Content-Type' => 'application/json'
+            ]);
+        }
     }
 }
