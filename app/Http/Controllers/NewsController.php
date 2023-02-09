@@ -310,4 +310,66 @@ class NewsController extends BaseController
        
 
     }
+
+    /*
+        POST COMMENT FUNCTION
+        function/method ini di gunakan untuk memberikan komentar pada berita 
+
+        @response code 2001 : berhasil mengomentari berita
+        @response code 406 : terdapat data yang tidak lolos validasi
+        @response code 500 : terdapat kesalahan pada server ketika mengomentari berita
+    */
+    public function postComment(Request $request) {
+
+        try {
+            $validator = Validator::make($request->all(),[
+                'id_news' => 'required|integer|exists:tbl_news,id',
+                'id_user' => 'required|integer|exists:tbl_user,id',
+                'comment' => 'required',
+            ],[
+                'id_news.required' => "ID NEWS tidak boleh kosong",
+                'id_user.required' => "ID USER tidak boleh kosong",
+                'id_news.integer' => "ID NEWS harus berupa integer",
+                'id_user.integer' => "ID USER harus berupa integer",
+                'id_news.exists' => "ID NEWS tidak valid/tidak terdaftar",
+                'id_user.exists' => "ID USER tidak valid/tidak terdaftar",
+                'comment.required' => "COMMENT tidak boleh kosong",
+            ]);
+
+            if ($validator->fails()) {
+                return response()->json([
+                    'code' => '406',
+                    'status' => 'failed',
+                    'message' => $validator->errors()
+                ],406,[
+                    'Content-Type' => 'application/json'
+                ]);
+            }
+
+            $this->commentModel::insert([
+                'id_news' => $request->input('id_news'),
+                'id_user' => $request->input('id_user'),
+                'comment' => $request->input('comment'),
+            ]);
+
+            return response()->json([
+                'code' => '201',
+                'status' => 'ok',
+                'message' => 'Berhasil menambahkan komentar pada berita'
+            ],201,[
+                'Content-Type' => 'application/json'
+            ]);
+
+            
+        } catch (Exception $error) {
+            return response([
+                'code' => '500',
+                'status' => 'failed',
+                'message' => 'Oops terjadi kesalahan di dalam server, silahkan coba lagi nanti'
+            ],500,[
+                'Content-Type' => 'application/json'
+            ]);
+        }
+
+    }
 }

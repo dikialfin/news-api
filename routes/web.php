@@ -26,6 +26,9 @@ $router->get('news[/{category}]',"NewsController@getNews");
 // Menyukai postingan berita
 $router->post('love',"NewsController@loveNews");
 
+// Memberikan komentar pada berita
+$router->post('comment',"NewsController@postComment");
+
 // Get Comment berdasarkan berita
 $router->get('comment/{idNews}',"NewsController@getComments");
 
